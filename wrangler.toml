@@ -2,9 +2,15 @@
 name = "datachannel-earthquake"
 main = "src/index.ts"
 compatibility_date = "2024-05-02"
+account_id = "3be6f7bb0cc73869d555e1156586c1f2"
+workers_dev = false
+
+routes = [
+	{ pattern = "datachannel-earthquake.catalyst.devintelops.io", custom_domain = true }
+]
 
 [[r2_buckets]]
-binding = 'STATIC_FILES' 
+binding = 'STATIC_FILES'
 bucket_name = 'datachannel-earthquake'
 
 # Automatically place your workloads in an optimal location to minimize latency.
@@ -19,8 +25,10 @@ bucket_name = 'datachannel-earthquake'
 # - https://developers.cloudflare.com/workers/wrangler/configuration/#environment-variables
 # Note: Use secrets to store sensitive data.
 # - https://developers.cloudflare.com/workers/configuration/secrets/
-# [vars]
-# MY_VARIABLE = "production_value"
+[vars]
+DEMO_ACTIVE = "false"
+CATALYST_JWK_URL = "https://gateway.catalyst.devintelops.io/.well-known/jwks.json"
+CATALYST_APP_ID = "b89a7f8e-4944-4b27-99dc-8ff870b322c5"
 
 # Bind the Workers AI model catalog. Run machine learning models, powered by serverless GPUs, on Cloudflare’s global network
 # Docs: https://developers.cloudflare.com/workers/wrangler/configuration/#workers-ai
@@ -54,14 +62,14 @@ bucket_name = 'datachannel-earthquake'
 # Durable Objects can live for as long as needed. Use these when you need a long-running "server", such as in realtime apps.
 # Docs: https://developers.cloudflare.com/workers/runtime-apis/durable-objects
 [[durable_objects.bindings]]
-name = "MY_DURABLE_OBJECT"
-class_name = "MyDurableObject"
+name = "EQ_DATA"
+class_name = "EQDataManager"
 
 # Durable Object migrations.
 # Docs: https://developers.cloudflare.com/workers/learning/using-durable-objects#configure-durable-object-classes-with-migrations
 [[migrations]]
 tag = "v1"
-new_classes = ["MyDurableObject"]
+new_classes = ["EQDataManager"]
 
 # Bind a Hyperdrive configuration. Use to accelerate access to your existing databases from Cloudflare Workers.
 # Docs: https://developers.cloudflare.com/workers/wrangler/configuration/#hyperdrive
