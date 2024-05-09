@@ -28,7 +28,7 @@ bucket_name = 'datachannel-earthquake'
 [vars]
 DEMO_ACTIVE = "true"
 CATALYST_JWK_URL = "https://gateway.catalyst.devintelops.io/.well-known/jwks.json"
-CATALYST_APP_ID = "b89a7f8e-4944-4b27-99dc-8ff870b322c5"
+CATALYST_APP_ID = "ab3b0f28-012e-47e5-ab35-268770335138"
 
 # Bind the Workers AI model catalog. Run machine learning models, powered by serverless GPUs, on Cloudflare’s global network
 # Docs: https://developers.cloudflare.com/workers/wrangler/configuration/#workers-ai
