@@ -26,7 +26,7 @@ bucket_name = 'datachannel-earthquake'
 # Note: Use secrets to store sensitive data.
 # - https://developers.cloudflare.com/workers/configuration/secrets/
 [vars]
-DEMO_ACTIVE = "false"
+DEMO_ACTIVE = "true"
 CATALYST_JWK_URL = "https://gateway.catalyst.devintelops.io/.well-known/jwks.json"
 CATALYST_APP_ID = "b89a7f8e-4944-4b27-99dc-8ff870b322c5"
 

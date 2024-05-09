@@ -36,6 +36,8 @@ const eqDataPoint = z.object({
 	"EpicenterLongitude": z.string(),
 	"EpicenterLatitude": z.string(),
 	"LocalMagnitude": z.string(),
+	expiry: z.number().optional(),
+	uuid: z.string().optional()
 })
 
 type eqDataPoint = z.infer<typeof eqDataPoint>
@@ -55,8 +57,10 @@ type eqData = z.infer<typeof eqData>
 const typeDefs = `
 type Earthquake {
     EpicenterLongitude: String!
-		EpicenterLatitude: String!
-		LocalMagnitude: String!
+	EpicenterLatitude: String!
+	LocalMagnitude: String!
+	expiry: Float!
+	UUID: String!
 }
 
 type Query {
@@ -129,7 +133,12 @@ export class EQDataManager extends DurableObject<Env> {
 		console.log("new events indexes", newEventIndexes, eqDataFile.cwaopendata.Dataset.Catalog.EarthquakeInfo.length)
 
 		newEventIndexes.forEach(index => {
-			earthquakes.push(eqDataFile.cwaopendata.Dataset.Catalog.EarthquakeInfo[index])
+			earthquakes.push(
+				{
+					uuid: crypto.randomUUID(),
+					expiry: Date.now() + (ALARM * 2),
+					...eqDataFile.cwaopendata.Dataset.Catalog.EarthquakeInfo[index]
+				})
 		})
 
 		while (earthquakes.length > EQ_LIMIT) {
