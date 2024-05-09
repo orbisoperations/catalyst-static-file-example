@@ -23,14 +23,7 @@ const ALARM = 45 * 1000 // 45s
 const EQ_LIMIT = 10
 
 
-const eqDataResult = z.discriminatedUnion("success", [
-	z.object({
-		success: z.literal(false),
-		error: z.string()
-	})
-])
 
-type eqDataResult = z.infer<typeof eqDataResult>
 
 const eqDataPoint = z.object({
 	"EpicenterLongitude": z.string(),
@@ -54,13 +47,26 @@ const eqData = z.object({
 
 type eqData = z.infer<typeof eqData>
 
+const eqDataResult = z.discriminatedUnion("success", [
+	z.object({
+		success: z.literal(false),
+		error: z.string()
+	}),
+	z.object({
+		success: z.literal(true),
+		data: eqDataPoint.array()
+	})
+])
+
+type eqDataResult = z.infer<typeof eqDataResult>
+
 const typeDefs = `
 type Earthquake {
     EpicenterLongitude: String!
 	EpicenterLatitude: String!
 	LocalMagnitude: String!
 	expiry: Float!
-	UUID: String!
+	uuid: String!
 }
 
 type Query {
@@ -174,6 +180,7 @@ app.use("/graphql", async (c) => {
 	try {
 		const { payload, protectedHeader } = await jwtVerify(token, JWKS)
 		valid = payload.claims != undefined && (payload.claims as string[]).includes(c.env.CATALYST_APP_ID)
+		console.log("jwt access to this claim is: ", valid)
 	} catch (e) {
 		console.error("error validating jwt: ", e)
 		valid = false
